@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagLev Solution Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning {
+            background: #fef5e7;
+            border: 2px solid #ed8936;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .table {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f8f9ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧲 MagLev Solution Calculator</h1>
+        
+        <div class="section">
+            <h2>Target Separation Parameters</h2>
+            <div class="grid">
+                <div>
+                    <div class="input-group">
+                        <label for="minDensity">Minimum Sample Density (g/cm³):</label>
+                        <input type="number" id="minDensity" value="1.0" step="0.01" min="0.5" max="3.0">
+                    </div>
+                    <div class="input-group">
+                        <label for="maxDensity">Maximum Sample Density (g/cm³):</label>
+                        <input type="number" id="maxDensity" value="1.5" step="0.01" min="0.5" max="3.0">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <label for="sensitivity">Desired Sensitivity:</label>
+                        <select id="sensitivity">
+                            <option value="high">High (10⁻⁴ g/cm³)</option>
+                            <option value="medium" selected>Medium (10⁻³ g/cm³)</option>
+                            <option value="low">Low (10⁻² g/cm³)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="sampleType">Sample Type:</label>
+                        <select id="sampleType">
+                            <option value="biological">Biological (cells, proteins)</option>
+                            <option value="polymer" selected>Polymers & Plastics</option>
+                            <option value="mineral">Minerals & Metals</option>
+                            <option value="liquid">Liquid Droplets</option>
+                            <option value="powder">Powders & Particles</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button onclick="calculateSolution()">Calculate Optimal Solution</button>
+        </div>
+        
+        <div id="results" style="display: none;">
+            <div class="section">
+                <h2>Recommended Solution</h2>
+                <div id="solutionResults"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Common Paramagnetic Solutions Reference</h2>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Density Range (g/cm³)</th>
+                            <th>Magnetic Susceptibility</th>
+                            <th>Best For</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0.1M MnCl₂</td>
+                            <td>1.00 - 1.10</td>
+                            <td>High sensitivity</td>
+                            <td>Biological samples</td>
+                            <td>Biocompatible, low toxicity</td>
+                        </tr>
+                        <tr>
+                            <td>1.0M MnCl₂</td>
+                            <td>1.00 - 1.30</td>
+                            <td>Medium sensitivity</td>
+                            <td>General purpose</td>
+                            <td>Most commonly used</td>
+                        </tr>
+                        <tr>
+                            <td>3.0M MnCl₂</td>
+                            <td>1.00 - 1.56</td>
+                            <td>Lower sensitivity</td>
+                            <td>Wide density range</td>
+                            <td>High dynamic range</td>
+                        </tr>
+                        <tr>
+                            <td>GdCl₃ (0.5M)</td>
+                            <td>0.8 - 3.0</td>
+                            <td>Very high</td>
+                            <td>Polymers, minerals</td>
+                            <td>Expensive but effective</td>
+                        </tr>
+                        <tr>
+                            <td>Gadobutrol</td>
+                            <td>1.05 - 1.2</td>
+                            <td>High</td>
+                            <td>Cell separation</td>
+                            <td>FDA approved, biocompatible</td>
+                        </tr>
+                        <tr>
+                            <td>MnCl₂ + Sucrose</td>
+                            <td>1.1 - 1.4</td>
+                            <td>Adjustable</td>
+                            <td>Density tuning</td>
+                            <td>Independent density adjustment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Solution Preparation Calculator</h2>
+            <div class="grid">
+                <div>
+                    <div class="input-group">
+                        <label for="targetVolume">Target Volume (mL):</label>
+                        <input type="number" id="targetVolume" value="100" min="1" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label for="selectedSalt">Paramagnetic Salt:</label>
+                        <select id="selectedSalt">
+                            <option value="MnCl2">MnCl₂·4H₂O</option>
+                            <option value="GdCl3">GdCl₃·6H₂O</option>
+                            <option value="FeCl2">FeCl₂·4H₂O</option>
+                            <option value="CuSO4">CuSO₄·5H₂O</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group">
+                        <label for="concentration">Concentration (M):</label>
+                        <input type="number" id="concentration" value="1.0" step="0.1" min="0.1" max="5.0">
+                    </div>
+                    <div class="input-group">
+                        <label for="additive">Density Additive (optional):</label>
+                        <select id="additive">
+                            <option value="none">None</option>
+                            <option value="sucrose">Sucrose</option>
+                            <option value="nacl">NaCl</option>
+                            <option value="d2o">D₂O</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button onclick="calculatePreparation()">Calculate Preparation</button>
+            <div id="preparationResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const molecularWeights = {
+            'MnCl2': 197.91, // MnCl2·4H2O
+            'GdCl3': 371.70, // GdCl3·6H2O
+            'FeCl2': 198.81, // FeCl2·4H2O
+            'CuSO4': 249.69  // CuSO4·5H2O
+        };
+
+        const additives = {
+            'sucrose': { mw: 342.30, density: 1.587 },
+            'nacl': { mw: 58.44, density: 2.165 },
+            'd2o': { mw: 20.03, density: 1.107 }
+        };
+
+        function calculateSolution() {
+            const minDensity = parseFloat(document.getElementById('minDensity').value);
+            const maxDensity = parseFloat(document.getElementById('maxDensity').value);
+            const sensitivity = document.getElementById('sensitivity').value;
+            const sampleType = document.getElementById('sampleType').value;
+            
+            let recommendation = generateRecommendation(minDensity, maxDensity, sensitivity, sampleType);
+            
+            document.getElementById('solutionResults').innerHTML = recommendation;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function generateRecommendation(minDens, maxDens, sens, type) {
+            const midpoint = (minDens + maxDens) / 2;
+            const range = maxDens - minDens;
+            
+            let solution, concentration, notes;
+            
+            // Determine optimal solution based on density range and sensitivity
+            if (type === 'biological') {
+                if (range < 0.1 && sens === 'high') {
+                    solution = 'Gadobutrol';
+                    concentration = '30 mM';
+                    notes = 'FDA-approved, excellent biocompatibility for cell separation';
+                } else {
+                    solution = 'MnCl₂·4H₂O';
+                    concentration = range < 0.2 ? '0.5M' : '1.0M';
+                    notes = 'Good biocompatibility, widely used for biological samples';
+                }
+            } else if (midpoint > 1.3) {
+                solution = 'GdCl₃·6H₂O';
+                concentration = '0.5M';
+                notes = 'High magnetic susceptibility, excellent for dense materials';
+            } else if (sens === 'high') {
+                solution = 'MnCl₂·4H₂O';
+                concentration = '0.1M';
+                notes = 'High sensitivity for small density differences';
+            } else {
+                solution = 'MnCl₂·4H₂O';
+                concentration = range > 0.3 ? '3.0M' : '1.0M';
+                notes = 'Standard solution for general purpose separation';
+            }
+            
+            // Calculate expected medium density
+            let mediumDensity = 1.00; // Base water density
+            if (solution.includes('MnCl₂')) {
+                const molarity = parseFloat(concentration);
+                mediumDensity += molarity * 0.08; // Approximate density increase
+            } else if (solution.includes('GdCl₃')) {
+                mediumDensity += 0.15; // Approximate for 0.5M GdCl3
+            }
+            
+            return `
+                <div class="result">
+                    <h3>✅ Recommended Solution: ${solution}</h3>
+                    <p><strong>Concentration:</strong> ${concentration}</p>
+                    <p><strong>Expected Medium Density:</strong> ${mediumDensity.toFixed(3)} g/cm³</p>
+                    <p><strong>Estimated Sensitivity:</strong> ${getSensitivityValue(sens)} g/cm³</p>
+                    <p><strong>Notes:</strong> ${notes}</p>
+                </div>
+                
+                <div class="warning">
+                    <h4>⚠️ Important Considerations:</h4>
+                    <ul>
+                        <li>Calibrate with density standards before use</li>
+                        <li>Ensure samples are compatible with the paramagnetic medium</li>
+                        <li>For biological samples, check osmolality and biocompatibility</li>
+                        <li>Consider adding surfactants (e.g., Tween-20) to prevent bubble formation</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function getSensitivityValue(sens) {
+            const values = {
+                'high': '10⁻⁴',
+                'medium': '10⁻³',
+                'low': '10⁻²'
+            };
+            return values[sens];
+        }
+
+        function calculatePreparation() {
+            const volume = parseFloat(document.getElementById('targetVolume').value);
+            const salt = document.getElementById('selectedSalt').value;
+            const concentration = parseFloat(document.getElementById('concentration').value);
+            const additive = document.getElementById('additive').value;
+            
+            const mw = molecularWeights[salt];
+            const massNeeded = (concentration * volume * mw) / 1000; // grams
+            
+            let result = `
+                <div class="result">
+                    <h3>📋 Preparation Instructions</h3>
+                    <h4>For ${volume} mL of ${concentration}M ${salt}:</h4>
+                    <ol>
+                        <li>Weigh out <strong>${massNeeded.toFixed(3)} g</strong> of ${salt}</li>
+                        <li>Add to approximately ${(volume * 0.8).toFixed(0)} mL of distilled water</li>
+                        <li>Stir until completely dissolved</li>
+                        <li>Adjust final volume to exactly ${volume} mL with distilled water</li>
+            `;
+            
+            if (additive !== 'none') {
+                const additiveInfo = additives[additive];
+                const additiveMass = (0.1 * volume * additiveInfo.mw) / 1000; // 0.1M default
+                result += `<li>Add <strong>${additiveMass.toFixed(3)} g</strong> of ${additive} for density adjustment</li>`;
+            }
+            
+            result += `
+                        <li>Filter through 0.22 μm filter if needed for biological applications</li>
+                    </ol>
+                    
+                    <div class="warning">
+                        <h4>⚠️ Safety Notes:</h4>
+                        <ul>
+                            <li>Wear appropriate PPE (gloves, safety glasses)</li>
+                            <li>Work in well-ventilated area</li>
+                            <li>Some paramagnetic salts may be toxic - check MSDS</li>
+                            <li>Store solutions in appropriate containers with proper labeling</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('preparationResults').innerHTML = result;
+        }
+    </script>
+</body>
+</html>

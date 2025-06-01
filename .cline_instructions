@@ -1,0 +1,9 @@
+- OS: Windows + PowerShell, venv environment. I'm on Windows using PowerShell and Python venv.
+- Preferred liabraries: QtPy, Pandas, Plotly, MatPlotLib, Numpy, ScientificPython, SciPy, 
+Code Organization Rules:
+- Keep Python files under 250 lines
+- Split files when they exceed 300 lines
+- One main responsibility per file
+- Always suggest splitting if a file gets too large
+- Prefer multiple small files over one large file
+
