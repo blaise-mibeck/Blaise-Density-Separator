@@ -1,9 +1,80 @@
-- OS: Windows + PowerShell, venv environment. I'm on Windows using PowerShell and Python venv.
-- Preferred liabraries: QtPy, Pandas, Plotly, MatPlotLib, Numpy, ScientificPython, SciPy, 
-Code Organization Rules:
-- Keep Python files under 250 lines
-- Split files when they exceed 300 lines
-- One main responsibility per file
-- Always suggest splitting if a file gets too large
-- Prefer multiple small files over one large file
+# Development Environment & Guidelines
 
+## System Environment
+- **OS**: Windows with PowerShell (NOT Linux/bash commands)
+- **Python**: Use venv environments exclusively
+- **Shell**: Always use PowerShell syntax for commands
+- **File paths**: Use Windows path separators (backslashes or forward slashes)
+
+## Current Project: Blaise-Density-Separator
+- Purpose: Design Files and Software for MagLev type density separator
+- Key data files: Design Files, Papers, Resources
+- Current status: Prototype built
+
+## Preferred Libraries & Stack
+- **GUI**: QtPy (preferred over tkinter)
+- **Data**: Pandas, Numpy
+- **Science**: SciPy, scikit-learn
+- **Visualization**: Plotly (interactive), Matplotlib (static)
+- **Image**: OpenCV, PIL/Pillow, scikit-image
+- **Performance**: Numba (for computational intensity)
+
+## Code Organization Rules
+- **Architecture Pattern**: Model-View-Controller
+- **File size**: Keep Python files under 250 lines, split at 300+ lines
+- **Responsibility**: One main purpose per file
+- **Structure**: Prefer multiple small files over monolithic files
+- **Naming**: Use descriptive filenames that indicate purpose
+- **Always suggest refactoring** when files become too large
+
+## Project Structure Guidelines
+```
+project_root/
+├── main.py              # Entry point, orchestration only
+├── config.py            # Constants, settings, paths
+├── data/                # Data files directory
+├── src/                 # Source code modules
+│   ├── data_loader.py   # Data import/validation
+│   ├── processors.py    # Data cleaning/transformation  
+│   ├── analyzers.py     # Analysis algorithms
+│   └── visualizers.py   # Plotting/display functions
+├── tests/               # Unit tests
+└── requirements.txt     # Dependencies
+```
+
+## Development Practices
+- **Incremental development**: Build and test one component at a time
+- **Error handling**: Include try/except blocks for file I/O and data operations
+- **Documentation**: Add docstrings to all functions
+- **Testing**: Create simple test cases for each module
+- **Virtual environment**: Always activate venv before installing packages
+
+## Performance Considerations
+- **Large datasets**: Use chunking for files >100MB
+- **Computationally intensive**: Consider multiprocessing or Numba
+- **Memory**: Monitor memory usage for image/data processing
+- **Progress indicators**: Use tqdm for long-running operations
+
+## Common Windows/PowerShell Commands
+```powershell
+# Virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install package_name
+
+# File operations
+Get-ChildItem (not ls)
+Test-Path (not test)
+```
+
+## Error Prevention
+- **Always check** if files/directories exist before operations
+- **Validate data types** before processing
+- **Handle missing values** explicitly in data operations
+- **Use relative paths** from project root when possible
+
+## Cost Optimization
+- **Focused requests**: Ask for one specific feature at a time
+- **Clear context**: Provide current state before requesting changes
+- **Avoid repetition**: Don't re-read large files unnecessarily
+- **Modular approach**: Work on isolated components to minimize context
